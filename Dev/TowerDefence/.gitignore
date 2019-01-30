@@ -1,0 +1,7 @@
+#Don't track the following folders
+.vs/
+Intermediate/
+Saved/
+
+#Don't track files with the following extensions
+*.sln
