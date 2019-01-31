@@ -1,5 +1,6 @@
 #Don't track the following folders
 .vs/
+Binaries/
 Intermediate/
 Saved/
 
