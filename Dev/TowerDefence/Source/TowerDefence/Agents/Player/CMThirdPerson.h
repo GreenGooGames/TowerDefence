@@ -6,12 +6,11 @@
 #include "Camera/PlayerCameraManager.h"
 #include "CMThirdPerson.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class TOWERDEFENCE_API ACMThirdPerson : public APlayerCameraManager
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void UpdateViewTarget(FTViewTarget& OutVT, float DeltaTime) override;
 };

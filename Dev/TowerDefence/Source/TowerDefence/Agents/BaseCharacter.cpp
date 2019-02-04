@@ -24,10 +24,14 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+#pragma region Movement
+void ABaseCharacter::MoveOnForward(float AxisValue)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	AddMovementInput(GetActorForwardVector(), AxisValue, false);
 }
 
+void ABaseCharacter::MoveOnRight(float AxisValue)
+{
+	AddMovementInput(GetActorRightVector(), AxisValue, false);
+}
+#pragma endregion

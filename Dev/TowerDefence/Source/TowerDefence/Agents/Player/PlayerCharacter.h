@@ -13,5 +13,5 @@ UCLASS()
 class TOWERDEFENCE_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+
 };

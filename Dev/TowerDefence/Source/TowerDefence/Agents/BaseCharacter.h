@@ -15,15 +15,25 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-protected:
+public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+#pragma region Movement
+public:
+	/**
+	 * Base Function to move on the Forward vector
+	 * @Param		AxisValue		scale of the movement
+	 */
+	virtual void MoveOnForward(float AxisValue);
 
+	/**
+ * Base Function to move on the Right vector
+ * @Param		AxisValue		scale of the movement
+ */
+	virtual void MoveOnRight(float AxisValue);
+#pragma endregion
 };
