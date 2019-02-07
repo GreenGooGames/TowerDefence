@@ -5,10 +5,13 @@
 #include "CollisionQueryParams.h"
 #include "WorldCollision.h"
 #include "Engine/World.h"
+#include "GameFramework/Character.h"
+#include "Components/SkeletalMeshComponent.h"
 
 void UControllerSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool bDoLocationLag, bool bDoRotationLag,
 	float DeltaTime)
 {
+
 	FRotator DesiredRot = GetTargetRotation();
 
 	const float InverseCameraLagMaxTimeStep = (1.f / CameraLagMaxTimeStep);
@@ -39,7 +42,16 @@ void UControllerSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool
 	PreviousDesiredRot = DesiredRot;
 
 	// Get the spring arm 'origin', the target we want to look at
-	FVector ArmOrigin = GetComponentLocation() + TargetOffset;
+	FVector ArmOrigin;
+	if (m_FocusedCharacter)
+	{
+		ArmOrigin = m_FocusedCharacter->GetMesh()->GetSocketLocation("CameraSocket") + TargetOffset;
+	}
+	else
+	{
+		ArmOrigin = GetComponentLocation() + TargetOffset;
+	}
+
 	// We lag the target, not the actual camera position, so rotating the camera around does not have lag
 	FVector DesiredLoc = ArmOrigin;
 	if (bDoLocationLag)
@@ -104,8 +116,8 @@ void UControllerSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool
 		bIsCameraFixed = true;
 		FCollisionQueryParams QueryParams(SCENE_QUERY_STAT(SpringArm), false, GetOwner());
 
-		if (m_FocusedActor)
-			QueryParams.AddIgnoredActor(m_FocusedActor);
+		if (m_FocusedCharacter)
+			QueryParams.AddIgnoredActor(m_FocusedCharacter);
 
 		FHitResult Result;
 		GetWorld()->SweepSingleByChannel(Result, ArmOrigin, DesiredLoc, FQuat::Identity, ProbeChannel, FCollisionShape::MakeSphere(ProbeSize), QueryParams);
@@ -136,4 +148,5 @@ void UControllerSpringArmComponent::UpdateDesiredArmLocation(bool bDoTrace, bool
 	RelativeSocketRotation = RelCamTM.GetRotation();
 
 	UpdateChildTransforms();
+
 }

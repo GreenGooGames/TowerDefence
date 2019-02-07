@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Components/InputComponent.h"
 #include "Agents/BaseCharacter.h"
+#include "Components/SkeletalMeshComponent.h"
 
 APCCamera::APCCamera()
 {
@@ -21,14 +22,14 @@ void APCCamera::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
 	m_PossessedCharacter = dynamic_cast<ABaseCharacter*>(GetCharacter());
-	m_SpringArm->m_FocusedActor = m_PossessedCharacter;
+	m_SpringArm->m_FocusedCharacter = dynamic_cast<ACharacter*>(m_PossessedCharacter);
 }
 
 void APCCamera::UnPossess()
 {
 	Super::UnPossess();
 	m_PossessedCharacter = nullptr;
-	m_SpringArm->m_FocusedActor = m_PossessedCharacter;
+	m_SpringArm->m_FocusedCharacter = nullptr;
 }
 
 #pragma region Camera
@@ -70,6 +71,7 @@ void APCCamera::SetupInputComponent()
 	InputComponent->BindAxis("MouseWheel", this, &APCCamera::ZoomCamera);
 	InputComponent->BindAxis("MouseX", this, &APCCamera::YawCamera);
 	InputComponent->BindAxis("MouseY", this, &APCCamera::PitchCamera);
+	InputComponent->BindAction("Spacebar", EInputEvent::IE_Pressed, this, &APCCamera::Jump);
 }
 
 void APCCamera::MoveOnForward(float AxisValue)
@@ -82,5 +84,11 @@ void APCCamera::MoveOnRight(float AxisValue)
 {
 	if (m_PossessedCharacter)
 		m_PossessedCharacter->MoveOnRight(AxisValue);
+}
+
+void APCCamera::Jump()
+{
+	if (m_PossessedCharacter)
+		m_PossessedCharacter->Jump();
 }
 #pragma endregion

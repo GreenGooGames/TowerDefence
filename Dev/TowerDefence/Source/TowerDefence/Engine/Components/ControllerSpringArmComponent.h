@@ -6,9 +6,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "ControllerSpringArmComponent.generated.h"
 
-/**
- * 
- */
+class ACharacter;
+
 UCLASS()
 class TOWERDEFENCE_API UControllerSpringArmComponent : public USpringArmComponent
 {
@@ -18,5 +17,5 @@ protected:
 	virtual void UpdateDesiredArmLocation(bool bDoTrace, bool bDoLocationLag, bool bDoRotationLag, float DeltaTime) override;
 
 public:
-	AActor* m_FocusedActor = nullptr;
+	ACharacter* m_FocusedCharacter = nullptr;
 };

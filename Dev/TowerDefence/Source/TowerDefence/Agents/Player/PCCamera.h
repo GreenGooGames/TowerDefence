@@ -82,5 +82,10 @@ private:
 	 * @Param		AxisValue		Scale of the movment
 	 */
 	void MoveOnRight(float AxisValue);
+
+	/**
+	 * Call Jump from the current possessed Character
+	 */
+	void Jump();
 #pragma endregion
 };
