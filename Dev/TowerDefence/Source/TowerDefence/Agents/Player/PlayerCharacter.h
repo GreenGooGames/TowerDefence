@@ -6,12 +6,16 @@
 #include "Agents/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
-/**
- * 
- */
+class UCombatComponent;
+
 UCLASS()
 class TOWERDEFENCE_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
+		APlayerCharacter();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCombatComponent* m_CombatComponent = nullptr;
 };

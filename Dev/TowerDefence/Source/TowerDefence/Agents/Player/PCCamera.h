@@ -69,7 +69,9 @@ private:
 #pragma region Input
 protected:
 	virtual void SetupInputComponent() override;
+#pragma endregion
 
+#pragma region Movement
 private:
 	/**
  * Call MoveOnForward from the current possessed BaseCharacter
@@ -87,5 +89,15 @@ private:
 	 * Call Jump from the current possessed Character
 	 */
 	void Jump();
+#pragma endregion
+
+#pragma region Skills
+	template <uint8 id>
+	void UseSkill()
+	{
+		UseSkill(id);
+	};
+
+	void UseSkill(uint8 SkillId);
 #pragma endregion
 };

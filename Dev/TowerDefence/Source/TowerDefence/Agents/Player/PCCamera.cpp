@@ -7,6 +7,8 @@
 #include "Components/InputComponent.h"
 #include "Agents/BaseCharacter.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "PlayerCharacter.h"
+#include "Combat/CombatComponent.h"
 
 APCCamera::APCCamera()
 {
@@ -53,9 +55,9 @@ void APCCamera::YawCamera(float AxisValue)
 
 void APCCamera::PitchCamera(float AxisValue)
 {
-	FRotator newRotation = m_Camera->GetComponentRotation();
+	FRotator newRotation = m_SpringArm->GetComponentRotation();
 	newRotation.Pitch = FMath::Clamp(newRotation.Pitch + AxisValue, m_CameraPitchMin, m_CameraPitchMax);
-	m_Camera->SetWorldRotation(newRotation);
+	m_SpringArm->SetWorldRotation(newRotation);
 }
 #pragma endregion
 
@@ -71,9 +73,16 @@ void APCCamera::SetupInputComponent()
 	InputComponent->BindAxis("MouseWheel", this, &APCCamera::ZoomCamera);
 	InputComponent->BindAxis("MouseX", this, &APCCamera::YawCamera);
 	InputComponent->BindAxis("MouseY", this, &APCCamera::PitchCamera);
-	InputComponent->BindAction("Spacebar", EInputEvent::IE_Pressed, this, &APCCamera::Jump);
+	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &APCCamera::Jump);
+	InputComponent->BindAction("Skill0", EInputEvent::IE_Pressed, this, &APCCamera::UseSkill<0>);
+	InputComponent->BindAction("Skill1", EInputEvent::IE_Pressed, this, &APCCamera::UseSkill<1>);
+	InputComponent->BindAction("Skill2", EInputEvent::IE_Pressed, this, &APCCamera::UseSkill<2>);
+	InputComponent->BindAction("Skill3", EInputEvent::IE_Pressed, this, &APCCamera::UseSkill<3>);
+	InputComponent->BindAction("Skill4", EInputEvent::IE_Pressed, this, &APCCamera::UseSkill<4>);
 }
+#pragma endregion
 
+#pragma region Movement
 void APCCamera::MoveOnForward(float AxisValue)
 {
 	if (m_PossessedCharacter)
@@ -90,5 +99,13 @@ void APCCamera::Jump()
 {
 	if (m_PossessedCharacter)
 		m_PossessedCharacter->Jump();
+}
+#pragma endregion
+
+#pragma region Skills
+void APCCamera::UseSkill(uint8 SkillId)
+{
+	if (m_PossessedCharacter)
+		dynamic_cast<APlayerCharacter*>(m_PossessedCharacter)->m_CombatComponent->UseSkill(SkillId);
 }
 #pragma endregion
