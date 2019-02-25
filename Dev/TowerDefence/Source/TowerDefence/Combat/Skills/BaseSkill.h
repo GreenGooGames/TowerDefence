@@ -22,7 +22,7 @@ class TOWERDEFENCE_API UBaseSkill : public UObject
 
 public:
 	/**Activates the skill*/
-	virtual void Activate(UWorld* World);
+	virtual void Activate(UWorld* World, APawn* Instigator);
 	/**Defines the logic to be executed when the skill is used (internal cool/cast time handling)*/
 	UFUNCTION()
 	virtual void Execute();
@@ -31,6 +31,9 @@ public:
 	/**Defines logic that happends when the skill becomes availble for re-castings*/
 	UFUNCTION()
 	virtual void SetCastable();
+
+	/**Defines the logic of the skill*/
+	virtual void SkillLogic();
 
 	/**Defines the condition logic to check if a skill can be used*/
 	virtual bool CanSkillBeUsed(float PlayerResourceAmmount);
@@ -47,6 +50,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Properties")
 		float m_ResourceCost = 0.0f;
+
+protected:
+	APawn* m_Instigator = nullptr;
 
 private:
 	FTimerHandle m_CoolDownTimerHandle;

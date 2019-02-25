@@ -5,11 +5,12 @@
 #include "Engine/Public/TimerManager.h"
 #include "Engine.h"
 
-void UBaseSkill::Activate(UWorld* World)
+void UBaseSkill::Activate(UWorld* World, APawn* Instigator)
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Activate --> Activated a new skill!")));
+	if (GEngine) GEngine->AddOnScreenDebugMessage(2, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Activate --> Activated a new skill!")));
 	m_World = World;
-	
+	m_Instigator = Instigator;
+
 	//Tell the system the skill is being channeled
 	m_SkillState = ESkillState::SS_IsBeingChanneled;
 
@@ -22,7 +23,10 @@ void UBaseSkill::Activate(UWorld* World)
 
 void UBaseSkill::Execute()
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(2, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Execute --> Executed a new skill!")));
+	if (GEngine) GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Execute --> Executed a new skill!")));
+
+	//Do the skilllogic
+	SkillLogic();
 
 	//Tell the system the skill is on cooldown
 	m_SkillState = ESkillState::SS_IsOnCooldown;
@@ -38,7 +42,7 @@ void UBaseSkill::Execute()
 
 void UBaseSkill::Interupt()
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(3, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Interupt --> Interupted a new skill!")));
+	if (GEngine) GEngine->AddOnScreenDebugMessage(8, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::Interupt --> Interupted a new skill!")));
 
 	//Tell the system the skill is on cooldown
 	m_SkillState = ESkillState::SS_IsOnCooldown;
@@ -54,7 +58,7 @@ void UBaseSkill::Interupt()
 
 void UBaseSkill::SetCastable()
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::SetCastable --> A skill is ready to be used again!")));
+	if (GEngine) GEngine->AddOnScreenDebugMessage(16, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::SetCastable --> A skill is ready to be used again!")));
 
 	//Tell the system the skill is castable
 	m_SkillState = ESkillState::SS_IsCastable;
@@ -64,11 +68,16 @@ void UBaseSkill::SetCastable()
 		m_World->GetTimerManager().ClearTimer(m_CoolDownTimerHandle);
 }
 
+void UBaseSkill::SkillLogic()
+{
+	if (GEngine) GEngine->AddOnScreenDebugMessage(5, 10.f, FColor::Blue, FString::Printf(TEXT("BaseSkill.cpp::SkillLogic --> BaseSkill has been used!")));
+}
+
 bool UBaseSkill::CanSkillBeUsed(float PlayerResourceAmmount)
 {
 	if(m_SkillState == ESkillState::SS_IsCastable && PlayerResourceAmmount >= m_ResourceCost)
 		return true;
 
-	if (GEngine) GEngine->AddOnScreenDebugMessage(5, 10.f, FColor::Red, FString::Printf(TEXT("BaseSkill.cpp::CanSkillBeUsed --> This skill cannot be used!")));
+	if (GEngine) GEngine->AddOnScreenDebugMessage(32, 10.f, FColor::Red, FString::Printf(TEXT("BaseSkill.cpp::CanSkillBeUsed --> This skill cannot be used!")));
 	return false;
 }

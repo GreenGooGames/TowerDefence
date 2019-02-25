@@ -43,8 +43,11 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
-	uint8 m_TotalSkills = 5;
+	uint8 m_MaxActiveSkills = 5;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
+	TArray< TSubclassOf<UBaseSkill> > m_LearnableSkillsClasses = {};
+	
+private:
 	TArray<UBaseSkill*> m_ActiveSkills = {};
 #pragma endregion
 };
